@@ -1,5 +1,6 @@
 import { useContext, useMemo, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
+import AdminUserManagementPanel from "../Components/AdminUserManagementPanel";
 import DashboardCardList from "../Components/DashboardCardList";
 import PortalLayout from "../Components/PortalLayout";
 import StatsGrid from "../Components/StatsGrid";
@@ -54,7 +55,7 @@ const DashboardPage = () => {
           <div>
             <h2>{role.title} Dashboard</h2>
             <p>
-              Logged in as <strong>{authSession.identifier}</strong>
+              Logged in as <strong>{authSession.name || authSession.identifier}</strong>
             </p>
           </div>
 
@@ -84,6 +85,8 @@ const DashboardPage = () => {
           <DashboardCardList title="Quick Actions" items={role.dashboard.actions} />
           <DashboardCardList title="Today Updates" items={role.dashboard.updates} />
         </div>
+
+        {normalizedRoleKey === "admin" && <AdminUserManagementPanel />}
       </section>
     </PortalLayout>
   );

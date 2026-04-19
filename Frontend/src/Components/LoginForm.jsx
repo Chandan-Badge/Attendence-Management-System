@@ -3,6 +3,7 @@ const LoginForm = ({
   formData,
   loginError,
   isSubmitting,
+  showDemoCredentialsButton,
   onInputChange,
   onFillDemoCredentials,
   onSubmit,
@@ -36,14 +37,16 @@ const LoginForm = ({
       {loginError && <p className="error-text">{loginError}</p>}
 
       <div className="login-actions">
-        <button
-          type="button"
-          className="ghost-button"
-          onClick={onFillDemoCredentials}
-          disabled={isSubmitting}
-        >
-          Use Demo Credentials
-        </button>
+        {showDemoCredentialsButton && (
+          <button
+            type="button"
+            className="ghost-button"
+            onClick={onFillDemoCredentials}
+            disabled={isSubmitting}
+          >
+            Use Demo Credentials
+          </button>
+        )}
         <button type="submit" className="primary-button" disabled={isSubmitting}>
           {isSubmitting ? "Logging in..." : "Login"}
         </button>

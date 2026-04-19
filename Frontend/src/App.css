@@ -138,6 +138,11 @@ h3 {
 	color: var(--text-muted);
 }
 
+.panel-note {
+	font-size: 0.86rem;
+	margin-top: 4px;
+}
+
 .role-grid {
 	margin-top: 24px;
 	display: grid;
@@ -283,6 +288,13 @@ h3 {
 	font-weight: 700;
 }
 
+.success-text {
+	margin: 10px 0;
+	color: #1e7f3f;
+	font-size: 0.9rem;
+	font-weight: 700;
+}
+
 .login-actions,
 .dashboard-controls {
 	display: flex;
@@ -394,6 +406,148 @@ h3 {
 	color: var(--accent-primary);
 }
 
+.admin-management {
+	margin-top: 18px;
+	padding: 18px;
+	border-radius: 16px;
+	border: 1px solid #dde8f7;
+	background: linear-gradient(155deg, #ffffff, #f4f9ff);
+}
+
+.admin-header p {
+	margin: 8px 0 0;
+	color: var(--text-muted);
+	font-size: 0.92rem;
+}
+
+.admin-summary-grid {
+	margin-top: 14px;
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 10px;
+}
+
+.admin-summary-card {
+	padding: 12px;
+	border-radius: 12px;
+	background: #ffffff;
+	border: 1px solid #e2ecfa;
+}
+
+.admin-summary-card p {
+	margin: 0;
+	font-size: 0.84rem;
+	color: var(--text-muted);
+}
+
+.admin-summary-card h4 {
+	margin: 8px 0 0;
+	font-family: "Sora", sans-serif;
+	font-size: 1.25rem;
+}
+
+.admin-form {
+	margin-top: 14px;
+	display: grid;
+	gap: 10px;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.admin-field {
+	display: grid;
+	gap: 6px;
+}
+
+.admin-field label {
+	font-size: 0.88rem;
+	font-weight: 700;
+}
+
+.admin-field input,
+.admin-field select,
+.admin-list-controls select {
+	width: 100%;
+	padding: 10px 12px;
+	border-radius: 10px;
+	border: 1px solid #d2dbea;
+	background: #ffffff;
+	font-size: 0.95rem;
+	font-family: "Manrope", sans-serif;
+}
+
+.admin-field input:disabled,
+.admin-field select:disabled,
+.admin-list-controls select:disabled {
+	opacity: 0.75;
+	cursor: not-allowed;
+}
+
+.admin-form-actions {
+	grid-column: 1 / -1;
+	display: flex;
+	justify-content: flex-start;
+	margin-top: 2px;
+}
+
+.admin-list-controls {
+	margin-top: 10px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+
+.admin-list-controls label {
+	font-size: 0.88rem;
+	font-weight: 700;
+}
+
+.managed-users-list {
+	margin-top: 12px;
+	display: grid;
+	gap: 10px;
+}
+
+.managed-user-card {
+	padding: 12px;
+	border-radius: 12px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 10px;
+	border: 1px solid #e2ebf8;
+	background: #ffffff;
+}
+
+.managed-user-card h4 {
+	font-size: 1rem;
+}
+
+.managed-user-card p {
+	margin: 4px 0 0;
+	color: var(--text-muted);
+	font-size: 0.9rem;
+}
+
+.user-role-pill {
+	padding: 6px 10px;
+	border-radius: 999px;
+	font-size: 0.78rem;
+	font-weight: 700;
+	text-transform: capitalize;
+	white-space: nowrap;
+}
+
+.role-teacher {
+	background: #fff0df;
+	color: #9a3f02;
+}
+
+.role-student {
+	background: #e8f7ff;
+	color: #045b8e;
+}
+
 @media (max-width: 900px) {
 	.role-grid {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -404,6 +558,14 @@ h3 {
 	}
 
 	.dashboard-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.admin-summary-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.admin-form {
 		grid-template-columns: 1fr;
 	}
 }

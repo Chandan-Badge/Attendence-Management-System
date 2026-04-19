@@ -5,6 +5,7 @@ export const AuthContext = createContext();
 
 const STORAGE_TOKEN_KEY = "ams_auth_token";
 const EMPTY_SESSION = {
+    id: "",
     role: "",
     identifier: "",
     name: "",
@@ -19,6 +20,24 @@ const AuthContextProvider = ({ children }) => {
     const clearSession = () => {
         localStorage.removeItem(STORAGE_TOKEN_KEY);
         setAuthSession(EMPTY_SESSION);
+    };
+
+    const getAuthToken = () => {
+        return authSession.token || localStorage.getItem(STORAGE_TOKEN_KEY) || "";
+    };
+
+    const getAuthorizedConfig = () => {
+        const token = getAuthToken();
+
+        if (!token) {
+            return {};
+        }
+
+        return {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        };
     };
 
     const restoreSession = async (token) => {
@@ -37,6 +56,7 @@ const AuthContextProvider = ({ children }) => {
             }
 
             setAuthSession({
+                id: user.id || "",
                 role: user.role,
                 identifier: user.identifier,
                 name: user.name || "",
@@ -82,6 +102,7 @@ const AuthContextProvider = ({ children }) => {
 
         localStorage.setItem(STORAGE_TOKEN_KEY, token);
         setAuthSession({
+            id: user.id || "",
             role: user.role,
             identifier: user.identifier,
             name: user.name || "",
@@ -92,7 +113,7 @@ const AuthContextProvider = ({ children }) => {
     };
 
     const logout = async () => {
-        const token = authSession.token || localStorage.getItem(STORAGE_TOKEN_KEY);
+        const token = getAuthToken();
 
         try {
             if (token) {
@@ -113,6 +134,25 @@ const AuthContextProvider = ({ children }) => {
         }
     };
 
+    const createManagedUser = async (payload) => {
+        const response = await axios.post(
+            `${backendUrl}/api/admin/users`,
+            payload,
+            getAuthorizedConfig(),
+        );
+
+        return response.data;
+    };
+
+    const getManagedUsers = async (role = "") => {
+        const response = await axios.get(`${backendUrl}/api/admin/users`, {
+            ...getAuthorizedConfig(),
+            params: role ? { role } : {},
+        });
+
+        return response.data;
+    };
+
     const value = useMemo(
         () => ({
             backendUrl,
@@ -123,6 +163,8 @@ const AuthContextProvider = ({ children }) => {
             ),
             login,
             logout,
+            createManagedUser,
+            getManagedUsers,
         }),
         [authSession, backendUrl, isAuthLoading],
     );

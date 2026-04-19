@@ -1,8 +1,9 @@
 import jwt from "jsonwebtoken";
+import User from "../models/User.js";
 
 const JWT_SECRET = process.env.JWT_SECRET?.trim() || "dev-attendance-secret";
 
-export const requireAuth = (req, res, next) => {
+export const requireAuth = async (req, res, next) => {
     const authHeader = req.headers.authorization || "";
 
     if (!authHeader.startsWith("Bearer ")) {
@@ -16,10 +17,30 @@ export const requireAuth = (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, JWT_SECRET);
+
+        if (!decoded.userId) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid token payload.",
+            });
+        }
+
+        const user = await User.findById(decoded.userId).select(
+            "_id role identifier name",
+        );
+
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: "User not found for this token.",
+            });
+        }
+
         req.user = {
-            role: decoded.role,
-            identifier: decoded.identifier,
-            name: decoded.name,
+            id: user._id.toString(),
+            role: user.role,
+            identifier: user.identifier,
+            name: user.name,
         };
 
         return next();
@@ -29,4 +50,17 @@ export const requireAuth = (req, res, next) => {
             message: "Invalid or expired token.",
         });
     }
+};
+
+export const requireRole = (...allowedRoles) => {
+    return (req, res, next) => {
+        if (!req.user || !allowedRoles.includes(req.user.role)) {
+            return res.status(403).json({
+                success: false,
+                message: "You are not authorized to perform this action.",
+            });
+        }
+
+        return next();
+    };
 };

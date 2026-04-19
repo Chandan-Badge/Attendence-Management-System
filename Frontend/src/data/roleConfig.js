@@ -7,10 +7,6 @@ export const ROLE_CONFIG = {
     accentPrimary: "#0ea5e9",
     accentSecondary: "#22d3ee",
     identifierLabel: "Enrollment ID",
-    demoCredentials: {
-      identifier: "student01",
-      password: "student123",
-    },
     dashboard: {
       stats: [
         { label: "Attendance This Month", value: "92%" },
@@ -37,10 +33,6 @@ export const ROLE_CONFIG = {
     accentPrimary: "#f97316",
     accentSecondary: "#fb923c",
     identifierLabel: "Faculty ID",
-    demoCredentials: {
-      identifier: "teacher01",
-      password: "teacher123",
-    },
     dashboard: {
       stats: [
         { label: "Classes Assigned", value: "8" },

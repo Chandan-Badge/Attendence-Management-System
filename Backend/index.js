@@ -2,12 +2,13 @@ import express from "express";
 import cors from "cors";
 import "dotenv/config";
 import main from "./config/mongoDB.js";
+import { ensureDefaultAdmin } from "./config/seedAdmin.js";
 import authRouter from "./routes/authRoutes.js";
+import adminRouter from "./routes/adminRoutes.js";
 
 // App config
 const app = express();
-let port = process.env.PORT || 8080;
-main();
+const port = process.env.PORT || 8080;
 
 app.use(express.json());
 app.use(
@@ -22,7 +23,20 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", authRouter);
+app.use("/api/admin", adminRouter);
 
-app.listen(port, () => {
-    console.log(`App was listen on port ${port}`);
-});
+const startServer = async () => {
+    try {
+        await main();
+        await ensureDefaultAdmin();
+
+        app.listen(port, () => {
+            console.log(`App was listen on port ${port}`);
+        });
+    } catch (error) {
+        console.error("Failed to start server:", error.message);
+        process.exit(1);
+    }
+};
+
+startServer();

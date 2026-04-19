@@ -12,6 +12,9 @@ const LoginPage = () => {
 
   const normalizedRoleKey = useMemo(() => roleKey?.toLowerCase() || "", [roleKey]);
   const role = getRoleConfig(normalizedRoleKey);
+  const hasDemoCredentials = Boolean(
+    role?.demoCredentials?.identifier && role?.demoCredentials?.password,
+  );
 
   const [formData, setFormData] = useState({ identifier: "", password: "" });
   const [loginError, setLoginError] = useState("");
@@ -50,6 +53,10 @@ const LoginPage = () => {
   };
 
   const fillDemoCredentials = () => {
+    if (!hasDemoCredentials) {
+      return;
+    }
+
     setFormData(role.demoCredentials);
     setLoginError("");
   };
@@ -90,12 +97,18 @@ const LoginPage = () => {
         <p className="panel-caption">
           Sign in to continue to your {role.title.toLowerCase()} dashboard.
         </p>
+        {!hasDemoCredentials && (
+          <p className="panel-caption panel-note">
+            Use the credentials created by your admin account.
+          </p>
+        )}
 
         <LoginForm
           role={role}
           formData={formData}
           loginError={loginError}
           isSubmitting={isSubmitting}
+          showDemoCredentialsButton={hasDemoCredentials}
           onInputChange={handleInputChange}
           onFillDemoCredentials={fillDemoCredentials}
           onSubmit={handleLogin}

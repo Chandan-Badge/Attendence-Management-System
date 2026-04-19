@@ -1,32 +1,21 @@
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-
-const DEMO_USERS = {
-    student: {
-        role: "student",
-        identifier: "student01",
-        password: "student123",
-        name: "Student User",
-    },
-    teacher: {
-        role: "teacher",
-        identifier: "teacher01",
-        password: "teacher123",
-        name: "Teacher User",
-    },
-    admin: {
-        role: "admin",
-        identifier: "admin@ams.com",
-        password: "admin123",
-        name: "Admin User",
-    },
-};
+import User from "../models/User.js";
 
 const TOKEN_EXPIRY = "8h";
 const JWT_SECRET = process.env.JWT_SECRET?.trim() || "dev-attendance-secret";
 
+const sanitizeUser = (user) => ({
+    id: user._id,
+    role: user.role,
+    identifier: user.identifier,
+    name: user.name,
+});
+
 const createAuthToken = (user) => {
     return jwt.sign(
         {
+            userId: user._id,
             role: user.role,
             identifier: user.identifier,
             name: user.name,
@@ -36,49 +25,59 @@ const createAuthToken = (user) => {
     );
 };
 
-export const login = (req, res) => {
-    const { role, identifier, password } = req.body;
+export const login = async (req, res) => {
+    try {
+        const { role, identifier, password } = req.body;
 
-    if (!role || !identifier || !password) {
-        return res.status(400).json({
+        if (!role || !identifier || !password) {
+            return res.status(400).json({
+                success: false,
+                message: "Role, identifier, and password are required.",
+            });
+        }
+
+        const normalizedRole = String(role).trim().toLowerCase();
+        const normalizedIdentifier = String(identifier).trim().toLowerCase();
+
+        const user = await User.findOne({
+            role: normalizedRole,
+            identifier: normalizedIdentifier,
+        });
+
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid credentials.",
+            });
+        }
+
+        const isPasswordValid = await bcrypt.compare(
+            String(password),
+            user.passwordHash,
+        );
+
+        if (!isPasswordValid) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid credentials.",
+            });
+        }
+
+        const token = createAuthToken(user);
+
+        return res.status(200).json({
+            success: true,
+            message: "Login successful.",
+            token,
+            user: sanitizeUser(user),
+        });
+    } catch (error) {
+        return res.status(500).json({
             success: false,
-            message: "Role, identifier, and password are required.",
+            message: "Unable to login right now.",
+            error: error.message,
         });
     }
-
-    const normalizedRole = String(role).toLowerCase();
-    const selectedUser = DEMO_USERS[normalizedRole];
-
-    if (!selectedUser) {
-        return res.status(400).json({
-            success: false,
-            message: "Invalid role selected.",
-        });
-    }
-
-    const idMatches =
-        String(identifier).trim().toLowerCase() === selectedUser.identifier.toLowerCase();
-    const passwordMatches = String(password) === selectedUser.password;
-
-    if (!idMatches || !passwordMatches) {
-        return res.status(401).json({
-            success: false,
-            message: "Invalid credentials.",
-        });
-    }
-
-    const token = createAuthToken(selectedUser);
-
-    return res.status(200).json({
-        success: true,
-        message: "Login successful.",
-        token,
-        user: {
-            role: selectedUser.role,
-            identifier: selectedUser.identifier,
-            name: selectedUser.name,
-        },
-    });
 };
 
 export const logout = (_req, res) => {
@@ -91,6 +90,11 @@ export const logout = (_req, res) => {
 export const getCurrentUser = (req, res) => {
     return res.status(200).json({
         success: true,
-        user: req.user,
+        user: {
+            id: req.user.id,
+            role: req.user.role,
+            identifier: req.user.identifier,
+            name: req.user.name,
+        },
     });
 };
