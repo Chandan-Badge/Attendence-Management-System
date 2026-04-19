@@ -146,6 +146,9 @@ h3 {
 }
 
 .role-card {
+	display: block;
+	text-decoration: none;
+	color: inherit;
 	border: none;
 	border-radius: 22px;
 	padding: 20px;
