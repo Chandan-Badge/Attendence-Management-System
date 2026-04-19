@@ -1,5 +1,5 @@
-import { useContext, useEffect, useMemo, useState } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import PortalLayout from "../Components/PortalLayout";
 import StatsGrid from "../Components/StatsGrid";
 import DashboardCardList from "../Components/DashboardCardList";
@@ -8,11 +8,10 @@ import { AuthContext } from "../context/AuthContext";
 import { getRoleConfig } from "../data/roleConfig";
 
 const AdminDashboard = () => {
-  const { roleKey } = useParams();
   const navigate = useNavigate();
   const { authSession, isAuthLoading, logout, getManagedUsers } = useContext(AuthContext);
 
-  const normalizedRoleKey = useMemo(() => roleKey?.toLowerCase() || "", [roleKey]);
+  const normalizedRoleKey = "admin";
   const role = getRoleConfig(normalizedRoleKey);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [adminSummary, setAdminSummary] = useState(null);
@@ -98,7 +97,7 @@ const AdminDashboard = () => {
     setIsLoggingOut(true);
     await logout();
     setIsLoggingOut(false);
-    navigate("/login/admin");
+    navigate("/");
   };
 
   return (

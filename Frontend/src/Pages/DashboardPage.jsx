@@ -120,7 +120,7 @@ const DashboardPage = () => {
     setIsLoggingOut(true);
     await logout();
     setIsLoggingOut(false);
-    navigate(`/login/${normalizedRoleKey}`);
+    navigate("/");
   };
 
   return (

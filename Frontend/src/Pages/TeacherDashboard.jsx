@@ -1,5 +1,5 @@
-import { useContext, useEffect, useMemo, useState } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import PortalLayout from "../Components/PortalLayout";
 import StatsGrid from "../Components/StatsGrid";
 import DashboardCardList from "../Components/DashboardCardList";
@@ -7,12 +7,11 @@ import { AuthContext } from "../context/AuthContext";
 import { getRoleConfig } from "../data/roleConfig";
 
 const TeacherDashboard = () => {
-  const { roleKey } = useParams();
   const navigate = useNavigate();
   const { authSession, isAuthLoading, logout, getTeacherDashboardSummary } =
     useContext(AuthContext);
 
-  const normalizedRoleKey = useMemo(() => roleKey?.toLowerCase() || "", [roleKey]);
+  const normalizedRoleKey = "teacher";
   const role = getRoleConfig(normalizedRoleKey);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [teacherSummary, setTeacherSummary] = useState(null);
@@ -101,7 +100,7 @@ const TeacherDashboard = () => {
     setIsLoggingOut(true);
     await logout();
     setIsLoggingOut(false);
-    navigate("/login/teacher");
+    navigate("/");
   };
 
   return (

@@ -63,6 +63,8 @@ const AdminUserManagementPanel = () => {
   const [editFormData, setEditFormData] = useState(INITIAL_EDIT_FORM);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [userPendingDelete, setUserPendingDelete] = useState(null);
+  const [showCreatePassword, setShowCreatePassword] = useState(false);
+  const [showEditPassword, setShowEditPassword] = useState(false);
 
   const fieldInputClassName =
     "w-full rounded-[10px] border border-[#d2dbea] bg-white px-3 py-2.5 font-body text-[0.95rem] focus:border-[var(--accent-primary)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-primary)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-75";
@@ -305,6 +307,7 @@ const AdminUserManagementPanel = () => {
         departments: [],
         subjects: [],
       }));
+      setShowCreatePassword(false);
       await loadUsers(roleFilter);
     } catch (error) {
       const apiError = error?.response?.data?.message;
@@ -327,6 +330,7 @@ const AdminUserManagementPanel = () => {
 
     setIsEditModalOpen(false);
     setEditFormData(INITIAL_EDIT_FORM);
+    setShowEditPassword(false);
   };
 
   const handleUpdateUser = async (event) => {
@@ -368,6 +372,7 @@ const AdminUserManagementPanel = () => {
       setSuccessMessage(data?.message || "Account updated successfully.");
       setIsEditModalOpen(false);
       setEditFormData(INITIAL_EDIT_FORM);
+      setShowEditPassword(false);
       await loadUsers(roleFilter);
     } catch (error) {
       const apiError = error?.response?.data?.message;
@@ -494,16 +499,49 @@ const AdminUserManagementPanel = () => {
             <label htmlFor="new-password" className="text-[0.88rem] font-bold">
               Password
             </label>
-            <input
-              id="new-password"
-              name="password"
-              type="password"
-              className={fieldInputClassName}
-              value={formData.password}
-              onChange={handleInputChange}
-              disabled={isSubmitting}
-              placeholder="At least 6 characters"
-            />
+            <div className="relative">
+              <input
+                id="new-password"
+                name="password"
+                type={showCreatePassword ? "text" : "password"}
+                className={`${fieldInputClassName} pr-12`}
+                value={formData.password}
+                onChange={handleInputChange}
+                disabled={isSubmitting}
+                placeholder="At least 6 characters"
+              />
+              <button
+                type="button"
+                onClick={() => setShowCreatePassword((previous) => !previous)}
+                disabled={isSubmitting}
+                aria-label={showCreatePassword ? "Hide password" : "Show password"}
+                className="absolute right-3 top-1/2 -translate-y-1/2 border-0 bg-transparent p-0 text-[#5b6b82] transition-colors hover:text-[var(--accent-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-primary)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  className="h-5 w-5"
+                  aria-hidden="true"
+                >
+                  {showCreatePassword ? (
+                    <>
+                      <path d="M3 3l18 18" />
+                      <path d="M10.6 10.6a2 2 0 002.8 2.8" />
+                      <path d="M9.9 5.1A10.9 10.9 0 0112 5c5.5 0 9.2 4.5 10 7-0.3 0.9-1.1 2.3-2.3 3.6" />
+                      <path d="M6.2 6.2C4.1 7.5 2.7 9.7 2 12c0.8 2.5 4.5 7 10 7 2.3 0 4.2-0.8 5.7-1.9" />
+                    </>
+                  ) : (
+                    <>
+                      <path d="M2 12s3.7-7 10-7 10 7 10 7-3.7 7-10 7-10-7-10-7z" />
+                      <circle cx="12" cy="12" r="3" />
+                    </>
+                  )}
+                </svg>
+              </button>
+            </div>
           </div>
 
           <div className="col-span-full grid gap-1.5 rounded-xl border border-[#e2ebf8] bg-white p-3">
@@ -743,16 +781,49 @@ const AdminUserManagementPanel = () => {
                 <label htmlFor="edit-password" className="text-[0.88rem] font-bold">
                   New Password (Optional)
                 </label>
-                <input
-                  id="edit-password"
-                  name="password"
-                  type="password"
-                  className={fieldInputClassName}
-                  value={editFormData.password}
-                  onChange={handleEditInputChange}
-                  disabled={Boolean(editingUserId)}
-                  placeholder="Leave blank to keep current password"
-                />
+                <div className="relative">
+                  <input
+                    id="edit-password"
+                    name="password"
+                    type={showEditPassword ? "text" : "password"}
+                    className={`${fieldInputClassName} pr-12`}
+                    value={editFormData.password}
+                    onChange={handleEditInputChange}
+                    disabled={Boolean(editingUserId)}
+                    placeholder="Leave blank to keep current password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowEditPassword((previous) => !previous)}
+                    disabled={Boolean(editingUserId)}
+                    aria-label={showEditPassword ? "Hide password" : "Show password"}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 border-0 bg-transparent p-0 text-[#5b6b82] transition-colors hover:text-[var(--accent-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-primary)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      className="h-5 w-5"
+                      aria-hidden="true"
+                    >
+                      {showEditPassword ? (
+                        <>
+                          <path d="M3 3l18 18" />
+                          <path d="M10.6 10.6a2 2 0 002.8 2.8" />
+                          <path d="M9.9 5.1A10.9 10.9 0 0112 5c5.5 0 9.2 4.5 10 7-0.3 0.9-1.1 2.3-2.3 3.6" />
+                          <path d="M6.2 6.2C4.1 7.5 2.7 9.7 2 12c0.8 2.5 4.5 7 10 7 2.3 0 4.2-0.8 5.7-1.9" />
+                        </>
+                      ) : (
+                        <>
+                          <path d="M2 12s3.7-7 10-7 10 7 10 7-3.7 7-10 7-10-7-10-7z" />
+                          <circle cx="12" cy="12" r="3" />
+                        </>
+                      )}
+                    </svg>
+                  </button>
+                </div>
               </div>
 
               <div className="col-span-full grid gap-1.5 rounded-xl border border-[#e2ebf8] bg-white p-3">
