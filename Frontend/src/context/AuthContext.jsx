@@ -216,6 +216,15 @@ const AuthContextProvider = ({ children }) => {
         return response.data;
     };
 
+    const getStudentAttendance = async (filters = {}) => {
+        const response = await axios.get(`${backendUrl}/api/student/attendance`, {
+            ...getAuthorizedConfig(),
+            params: filters,
+        });
+
+        return response.data;
+    };
+
     const value = useMemo(
         () => ({
             backendUrl,
@@ -234,6 +243,7 @@ const AuthContextProvider = ({ children }) => {
             getTeacherAttendanceMeta,
             getStudentsForAttendance,
             submitTeacherAttendance,
+            getStudentAttendance,
         }),
         [authSession, backendUrl, isAuthLoading],
     );

@@ -6,6 +6,7 @@ import { ensureDefaultAdmin } from "./config/seedAdmin.js";
 import authRouter from "./routes/authRoutes.js";
 import adminRouter from "./routes/adminRoutes.js";
 import teacherRouter from "./routes/teacherRoutes.js";
+import studentRouter from "./routes/studentRoutes.js";
 
 // App config
 const app = express();
@@ -26,6 +27,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/teacher", teacherRouter);
+app.use("/api/student", studentRouter);
 
 const startServer = async () => {
     try {
