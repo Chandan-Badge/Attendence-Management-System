@@ -20,6 +20,8 @@ const LoginPage = () => {
   const [loginError, setLoginError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const panelCaptionClassName = "mt-[10px] text-text-muted";
+
   if (!role) {
     return <Navigate to="/" replace />;
   }
@@ -27,9 +29,9 @@ const LoginPage = () => {
   if (isAuthLoading) {
     return (
       <PortalLayout activeRole={role}>
-        <section className="login-panel">
-          <h2>{role.title} Login</h2>
-          <p className="panel-caption">Checking active session...</p>
+        <section className="animate-fadeInUpFast">
+          <h2 className="font-heading">{role.title} Login</h2>
+          <p className={panelCaptionClassName}>Checking active session...</p>
         </section>
       </PortalLayout>
     );
@@ -88,17 +90,21 @@ const LoginPage = () => {
 
   return (
     <PortalLayout activeRole={role}>
-      <section className="login-panel">
-        <button type="button" className="text-button" onClick={() => navigate("/")}>
+      <section className="animate-fadeInUpFast">
+        <button
+          type="button"
+          className="mb-[14px] border-0 bg-transparent p-0 font-extrabold text-[var(--accent-primary)] transition-colors hover:text-[var(--accent-secondary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-primary)] focus-visible:ring-offset-2"
+          onClick={() => navigate("/")}
+        >
           Back to role selection
         </button>
 
-        <h2>{role.title} Login</h2>
-        <p className="panel-caption">
+        <h2 className="font-heading">{role.title} Login</h2>
+        <p className={panelCaptionClassName}>
           Sign in to continue to your {role.title.toLowerCase()} dashboard.
         </p>
         {!hasDemoCredentials && (
-          <p className="panel-caption panel-note">
+          <p className="mt-1 text-[0.86rem] text-text-muted">
             Use the credentials created by your admin account.
           </p>
         )}
