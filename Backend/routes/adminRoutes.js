@@ -1,5 +1,9 @@
 import express from "express";
-import { createManagedUser, getManagedUsers } from "../controllers/adminController.js";
+import {
+	createManagedUser,
+	deleteManagedUser,
+	getManagedUsers,
+} from "../controllers/adminController.js";
 import { requireAuth, requireRole } from "../middlewares/authMiddleware.js";
 
 const adminRouter = express.Router();
@@ -9,5 +13,6 @@ adminRouter.use(requireRole("admin"));
 
 adminRouter.post("/users", createManagedUser);
 adminRouter.get("/users", getManagedUsers);
+adminRouter.delete("/users/:userId", deleteManagedUser);
 
 export default adminRouter;

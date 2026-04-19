@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import axios from "axios";
 import { createContext, useEffect, useMemo, useState } from "react";
 
@@ -64,7 +65,7 @@ const AuthContextProvider = ({ children }) => {
             });
             localStorage.setItem(STORAGE_TOKEN_KEY, token);
             return true;
-        } catch (_error) {
+        } catch {
             clearSession();
             return false;
         }
@@ -127,7 +128,7 @@ const AuthContextProvider = ({ children }) => {
                     },
                 );
             }
-        } catch (_error) {
+        } catch {
             // Client still clears session even if logout API fails.
         } finally {
             clearSession();
@@ -153,6 +154,15 @@ const AuthContextProvider = ({ children }) => {
         return response.data;
     };
 
+    const deleteManagedUser = async (userId) => {
+        const response = await axios.delete(
+            `${backendUrl}/api/admin/users/${userId}`,
+            getAuthorizedConfig(),
+        );
+
+        return response.data;
+    };
+
     const value = useMemo(
         () => ({
             backendUrl,
@@ -165,6 +175,7 @@ const AuthContextProvider = ({ children }) => {
             logout,
             createManagedUser,
             getManagedUsers,
+            deleteManagedUser,
         }),
         [authSession, backendUrl, isAuthLoading],
     );

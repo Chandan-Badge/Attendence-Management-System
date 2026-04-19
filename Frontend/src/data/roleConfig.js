@@ -6,7 +6,7 @@ export const ROLE_CONFIG = {
       "Track daily attendance, subjects, and leave requests from one place.",
     accentPrimary: "#0ea5e9",
     accentSecondary: "#22d3ee",
-    identifierLabel: "Enrollment ID",
+    identifierLabel: "Enrollment Number",
     dashboard: {
       stats: [
         { label: "Attendance This Month", value: "92%" },
