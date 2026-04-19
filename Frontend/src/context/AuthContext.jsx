@@ -173,6 +173,49 @@ const AuthContextProvider = ({ children }) => {
         return response.data;
     };
 
+    const getTeacherDashboardSummary = async () => {
+        const response = await axios.get(
+            `${backendUrl}/api/teacher/dashboard-summary`,
+            getAuthorizedConfig(),
+        );
+
+        return response.data;
+    };
+
+    const getTeacherAttendanceMeta = async () => {
+        const response = await axios.get(
+            `${backendUrl}/api/teacher/attendance/meta`,
+            getAuthorizedConfig(),
+        );
+
+        return response.data;
+    };
+
+    const getStudentsForAttendance = async ({ department, subject }) => {
+        const response = await axios.get(
+            `${backendUrl}/api/teacher/attendance/students`,
+            {
+                ...getAuthorizedConfig(),
+                params: {
+                    department,
+                    subject,
+                },
+            },
+        );
+
+        return response.data;
+    };
+
+    const submitTeacherAttendance = async (payload) => {
+        const response = await axios.post(
+            `${backendUrl}/api/teacher/attendance`,
+            payload,
+            getAuthorizedConfig(),
+        );
+
+        return response.data;
+    };
+
     const value = useMemo(
         () => ({
             backendUrl,
@@ -187,6 +230,10 @@ const AuthContextProvider = ({ children }) => {
             getManagedUsers,
             deleteManagedUser,
             updateManagedUser,
+            getTeacherDashboardSummary,
+            getTeacherAttendanceMeta,
+            getStudentsForAttendance,
+            submitTeacherAttendance,
         }),
         [authSession, backendUrl, isAuthLoading],
     );

@@ -37,10 +37,10 @@ export const ROLE_CONFIG = {
       stats: [
         { label: "Classes Assigned", value: "8" },
         { label: "Attendance Marked Today", value: "4" },
-        { label: "Defaulter Alerts", value: "6" },
+        { label: "Subjects Assigned", value: "6" },
       ],
       actions: [
-        "Take attendance for next class",
+        "Make attendance",
         "Review absentee list",
         "Send attendance alerts",
       ],

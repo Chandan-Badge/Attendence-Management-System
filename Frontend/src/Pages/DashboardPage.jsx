@@ -10,41 +10,65 @@ import { getRoleConfig } from "../data/roleConfig";
 const DashboardPage = () => {
   const { roleKey } = useParams();
   const navigate = useNavigate();
-  const { authSession, isAuthLoading, logout, getManagedUsers } = useContext(AuthContext);
+  const { authSession, isAuthLoading, logout, getManagedUsers, getTeacherDashboardSummary } =
+    useContext(AuthContext);
 
   const normalizedRoleKey = useMemo(() => roleKey?.toLowerCase() || "", [roleKey]);
   const role = getRoleConfig(normalizedRoleKey);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [adminSummary, setAdminSummary] = useState(null);
+  const [teacherSummary, setTeacherSummary] = useState(null);
 
   useEffect(() => {
     let isActive = true;
 
-    const loadAdminSummary = async () => {
-      if (normalizedRoleKey !== "admin") {
-        setAdminSummary(null);
+    const loadDashboardSummaries = async () => {
+      if (normalizedRoleKey === "admin") {
+        try {
+          const data = await getManagedUsers();
+
+          if (isActive) {
+            setAdminSummary(data?.summary || null);
+            setTeacherSummary(null);
+          }
+        } catch {
+          if (isActive) {
+            setAdminSummary(null);
+            setTeacherSummary(null);
+          }
+        }
         return;
       }
 
-      try {
-        const data = await getManagedUsers();
+      if (normalizedRoleKey === "teacher") {
+        try {
+          const data = await getTeacherDashboardSummary();
 
-        if (isActive) {
-          setAdminSummary(data?.summary || null);
+          if (isActive) {
+            setTeacherSummary(data?.summary || null);
+            setAdminSummary(null);
+          }
+        } catch {
+          if (isActive) {
+            setTeacherSummary(null);
+            setAdminSummary(null);
+          }
         }
-      } catch {
-        if (isActive) {
-          setAdminSummary(null);
-        }
+        return;
+      }
+
+      if (isActive) {
+        setAdminSummary(null);
+        setTeacherSummary(null);
       }
     };
 
-    loadAdminSummary();
+    loadDashboardSummaries();
 
     return () => {
       isActive = false;
     };
-  }, [getManagedUsers, normalizedRoleKey]);
+  }, [getManagedUsers, getTeacherDashboardSummary, normalizedRoleKey]);
 
   const dashboardStats =
     normalizedRoleKey === "admin" && adminSummary
@@ -52,6 +76,15 @@ const DashboardPage = () => {
           { label: "Total Students", value: String(adminSummary.students ?? 0) },
           { label: "Total Teachers", value: String(adminSummary.teachers ?? 0) },
           { label: "Total Managed Users", value: String(adminSummary.totalManaged ?? 0) },
+        ]
+      : normalizedRoleKey === "teacher" && teacherSummary
+      ? [
+          { label: "Classes Assigned", value: String(teacherSummary.classesAssigned ?? 0) },
+          {
+            label: "Attendance Marked Today",
+            value: String(teacherSummary.attendanceMarkedToday ?? 0),
+          },
+          { label: "Subjects Assigned", value: String(teacherSummary.subjectsAssigned ?? 0) },
         ]
       : role.dashboard.stats;
 
@@ -122,6 +155,18 @@ const DashboardPage = () => {
         </div>
 
         <StatsGrid stats={dashboardStats} />
+
+        {normalizedRoleKey === "teacher" && (
+          <div className="mb-4">
+            <button
+              type="button"
+              className={`${actionButtonBaseClassName} bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)] text-white shadow-[0_10px_20px_rgba(249,115,22,0.25)]`}
+              onClick={() => navigate(`/dashboard/${normalizedRoleKey}/attendance`)}
+            >
+              Make Attendance
+            </button>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 gap-[14px] min-[901px]:grid-cols-2">
           <DashboardCardList title="Quick Actions" items={role.dashboard.actions} />
