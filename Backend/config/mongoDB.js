@@ -1,11 +1,19 @@
 import mongoose from "mongoose";
 
 const main = async () => {
-    mongoose.connect(`${process.env.MONGODB_URI}/Attendence-MS`)
-}
+    const mongoUri = process.env.MONGODB_URI?.trim();
 
-main()
-    .then(() => console.log("DB Connection Successful..."))
-    .catch((err) => console.log("MongoDB connection Error:-", err));
+    if (!mongoUri) {
+        console.warn("MONGODB_URI is not set. Skipping database connection.");
+        return;
+    }
+
+    try {
+        await mongoose.connect(`${mongoUri}/Attendence-MS`);
+        console.log("DB Connection Successful...");
+    } catch (err) {
+        console.log("MongoDB connection Error:-", err.message);
+    }
+};
 
 export default main;

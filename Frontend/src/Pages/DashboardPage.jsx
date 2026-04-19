@@ -1,4 +1,4 @@
-import { useContext, useMemo } from "react";
+import { useContext, useMemo, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import DashboardCardList from "../Components/DashboardCardList";
 import PortalLayout from "../Components/PortalLayout";
@@ -9,26 +9,41 @@ import { getRoleConfig } from "../data/roleConfig";
 const DashboardPage = () => {
   const { roleKey } = useParams();
   const navigate = useNavigate();
-  const { authSession, logout } = useContext(AuthContext);
+  const { authSession, isAuthLoading, logout } = useContext(AuthContext);
 
   const normalizedRoleKey = useMemo(() => roleKey?.toLowerCase() || "", [roleKey]);
   const role = getRoleConfig(normalizedRoleKey);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   if (!role) {
     return <Navigate to="/" replace />;
+  }
+
+  if (isAuthLoading) {
+    return (
+      <PortalLayout activeRole={role}>
+        <section className="dashboard-panel">
+          <p className="panel-caption">Checking active session...</p>
+        </section>
+      </PortalLayout>
+    );
   }
 
   if (!authSession.identifier || authSession.role !== normalizedRoleKey) {
     return <Navigate to={`/login/${normalizedRoleKey}`} replace />;
   }
 
-  const switchRole = () => {
-    logout();
+  const switchRole = async () => {
+    setIsLoggingOut(true);
+    await logout();
+    setIsLoggingOut(false);
     navigate("/");
   };
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    await logout();
+    setIsLoggingOut(false);
     navigate(`/login/${normalizedRoleKey}`);
   };
 
@@ -44,11 +59,21 @@ const DashboardPage = () => {
           </div>
 
           <div className="dashboard-controls">
-            <button type="button" className="ghost-button" onClick={switchRole}>
+            <button
+              type="button"
+              className="ghost-button"
+              onClick={switchRole}
+              disabled={isLoggingOut}
+            >
               Switch Role
             </button>
-            <button type="button" className="primary-button" onClick={handleLogout}>
-              Logout
+            <button
+              type="button"
+              className="primary-button"
+              onClick={handleLogout}
+              disabled={isLoggingOut}
+            >
+              {isLoggingOut ? "Logging out..." : "Logout"}
             </button>
           </div>
         </div>

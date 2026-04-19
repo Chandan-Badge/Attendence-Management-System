@@ -2,6 +2,7 @@ const LoginForm = ({
   role,
   formData,
   loginError,
+  isSubmitting,
   onInputChange,
   onFillDemoCredentials,
   onSubmit,
@@ -15,6 +16,7 @@ const LoginForm = ({
         type="text"
         value={formData.identifier}
         onChange={onInputChange}
+        disabled={isSubmitting}
         placeholder={`Enter ${role.identifierLabel.toLowerCase()}`}
         autoComplete="username"
       />
@@ -26,6 +28,7 @@ const LoginForm = ({
         type="password"
         value={formData.password}
         onChange={onInputChange}
+        disabled={isSubmitting}
         placeholder="Enter password"
         autoComplete="current-password"
       />
@@ -37,11 +40,12 @@ const LoginForm = ({
           type="button"
           className="ghost-button"
           onClick={onFillDemoCredentials}
+          disabled={isSubmitting}
         >
           Use Demo Credentials
         </button>
-        <button type="submit" className="primary-button">
-          Login
+        <button type="submit" className="primary-button" disabled={isSubmitting}>
+          {isSubmitting ? "Logging in..." : "Login"}
         </button>
       </div>
     </form>

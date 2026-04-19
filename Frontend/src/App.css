@@ -271,6 +271,11 @@ h3 {
 	border-color: var(--accent-primary);
 }
 
+.login-form input:disabled {
+	opacity: 0.75;
+	cursor: not-allowed;
+}
+
 .error-text {
 	margin: 2px 0 4px;
 	color: #c02f2f;
@@ -314,6 +319,13 @@ h3 {
 .primary-button:hover,
 .ghost-button:hover {
 	transform: translateY(-2px);
+}
+
+.primary-button:disabled,
+.ghost-button:disabled {
+	opacity: 0.75;
+	cursor: not-allowed;
+	transform: none;
 }
 
 .dashboard-top {

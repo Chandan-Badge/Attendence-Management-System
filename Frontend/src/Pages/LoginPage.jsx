@@ -8,16 +8,28 @@ import { getRoleConfig } from "../data/roleConfig";
 const LoginPage = () => {
   const { roleKey } = useParams();
   const navigate = useNavigate();
-  const { authSession, login } = useContext(AuthContext);
+  const { authSession, isAuthLoading, login } = useContext(AuthContext);
 
   const normalizedRoleKey = useMemo(() => roleKey?.toLowerCase() || "", [roleKey]);
   const role = getRoleConfig(normalizedRoleKey);
 
   const [formData, setFormData] = useState({ identifier: "", password: "" });
   const [loginError, setLoginError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!role) {
     return <Navigate to="/" replace />;
+  }
+
+  if (isAuthLoading) {
+    return (
+      <PortalLayout activeRole={role}>
+        <section className="login-panel">
+          <h2>{role.title} Login</h2>
+          <p className="panel-caption">Checking active session...</p>
+        </section>
+      </PortalLayout>
+    );
   }
 
   if (authSession.role === normalizedRoleKey && authSession.identifier) {
@@ -42,7 +54,7 @@ const LoginPage = () => {
     setLoginError("");
   };
 
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
 
     const typedIdentifier = formData.identifier.trim();
@@ -53,20 +65,18 @@ const LoginPage = () => {
       return;
     }
 
-    const matchesDemoId =
-      typedIdentifier.toLowerCase() ===
-      role.demoCredentials.identifier.toLowerCase();
-    const matchesDemoPassword = typedPassword === role.demoCredentials.password;
+    setIsSubmitting(true);
+    setLoginError("");
 
-    if (!matchesDemoId || !matchesDemoPassword) {
-      setLoginError(
-        `Use demo credentials: ${role.demoCredentials.identifier} / ${role.demoCredentials.password}`,
-      );
-      return;
+    try {
+      await login(normalizedRoleKey, typedIdentifier, typedPassword);
+      navigate(`/dashboard/${normalizedRoleKey}`);
+    } catch (error) {
+      const apiError = error?.response?.data?.message;
+      setLoginError(apiError || "Unable to login right now. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
-
-    login(normalizedRoleKey, typedIdentifier);
-    navigate(`/dashboard/${normalizedRoleKey}`);
   };
 
   return (
@@ -85,6 +95,7 @@ const LoginPage = () => {
           role={role}
           formData={formData}
           loginError={loginError}
+          isSubmitting={isSubmitting}
           onInputChange={handleInputChange}
           onFillDemoCredentials={fillDemoCredentials}
           onSubmit={handleLogin}
