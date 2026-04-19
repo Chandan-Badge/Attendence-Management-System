@@ -12,9 +12,12 @@ const LoginPage = () => {
 
   const normalizedRoleKey = useMemo(() => roleKey?.toLowerCase() || "", [roleKey]);
   const role = getRoleConfig(normalizedRoleKey);
-  const hasDemoCredentials = Boolean(
-    role?.demoCredentials?.identifier && role?.demoCredentials?.password,
-  );
+  
+  // Demo credentials only for admin
+  const demoCredentials = normalizedRoleKey === "admin" 
+    ? { identifier: "admin@ams.com", password: "admin123" }
+    : null;
+  const hasDemoCredentials = Boolean(demoCredentials);
 
   const [formData, setFormData] = useState({ identifier: "", password: "" });
   const [loginError, setLoginError] = useState("");
@@ -55,11 +58,11 @@ const LoginPage = () => {
   };
 
   const fillDemoCredentials = () => {
-    if (!hasDemoCredentials) {
+    if (!demoCredentials) {
       return;
     }
 
-    setFormData(role.demoCredentials);
+    setFormData(demoCredentials);
     setLoginError("");
   };
 
