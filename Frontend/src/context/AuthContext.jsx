@@ -163,6 +163,16 @@ const AuthContextProvider = ({ children }) => {
         return response.data;
     };
 
+    const updateManagedUser = async (userId, payload) => {
+        const response = await axios.patch(
+            `${backendUrl}/api/admin/users/${userId}`,
+            payload,
+            getAuthorizedConfig(),
+        );
+
+        return response.data;
+    };
+
     const value = useMemo(
         () => ({
             backendUrl,
@@ -176,6 +186,7 @@ const AuthContextProvider = ({ children }) => {
             createManagedUser,
             getManagedUsers,
             deleteManagedUser,
+            updateManagedUser,
         }),
         [authSession, backendUrl, isAuthLoading],
     );

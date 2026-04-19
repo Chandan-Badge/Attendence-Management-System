@@ -184,6 +184,125 @@ export const getManagedUsers = async (req, res) => {
     }
 };
 
+export const updateManagedUser = async (req, res) => {
+    try {
+        const userId = String(req.params.userId || "").trim();
+
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid user id.",
+            });
+        }
+
+        const existingUser = await User.findOne({
+            _id: userId,
+            role: { $in: MANAGED_ROLES },
+        });
+
+        if (!existingUser) {
+            return res.status(404).json({
+                success: false,
+                message: "Teacher or student user not found.",
+            });
+        }
+
+        const hasPasswordField = typeof req.body.password === "string";
+        const nextPassword = hasPasswordField ? String(req.body.password) : "";
+
+        if (hasPasswordField && nextPassword && nextPassword.length < 6) {
+            return res.status(400).json({
+                success: false,
+                message: "Password must be at least 6 characters long.",
+            });
+        }
+
+        const nextName =
+            req.body.name !== undefined
+                ? String(req.body.name).trim()
+                : existingUser.name;
+        const nextIdentifier =
+            req.body.identifier !== undefined
+                ? String(req.body.identifier).trim().toLowerCase()
+                : existingUser.identifier;
+        const nextDepartments =
+            req.body.departments !== undefined
+                ? normalizeStringArray(req.body.departments)
+                : normalizeStringArray(existingUser.departments);
+        const nextSubjects =
+            req.body.subjects !== undefined
+                ? normalizeStringArray(req.body.subjects)
+                : normalizeStringArray(existingUser.subjects);
+
+        if (req.body.role && String(req.body.role).trim().toLowerCase() !== existingUser.role) {
+            return res.status(400).json({
+                success: false,
+                message: "Role cannot be changed for existing accounts.",
+            });
+        }
+
+        if (!nextName || !nextIdentifier) {
+            return res.status(400).json({
+                success: false,
+                message: "Name and identifier are required.",
+            });
+        }
+
+        const assignmentValidationError = getAssignmentValidationError(
+            existingUser.role,
+            nextDepartments,
+            nextSubjects,
+        );
+
+        if (assignmentValidationError) {
+            return res.status(400).json({
+                success: false,
+                message: assignmentValidationError,
+            });
+        }
+
+        if (nextIdentifier !== existingUser.identifier) {
+            const identifierOwner = await User.findOne({ identifier: nextIdentifier });
+
+            if (identifierOwner) {
+                return res.status(409).json({
+                    success: false,
+                    message: "Identifier already exists. Please use a unique identifier.",
+                });
+            }
+        }
+
+        const updatePayload = {
+            name: nextName,
+            identifier: nextIdentifier,
+            departments: nextDepartments,
+            subjects: nextSubjects,
+        };
+
+        if (hasPasswordField && nextPassword) {
+            updatePayload.passwordHash = await bcrypt.hash(nextPassword, 10);
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { $set: updatePayload },
+            { new: true, runValidators: true },
+        );
+
+        return res.status(200).json({
+            success: true,
+            message: `${existingUser.role} account updated successfully.`,
+            user: sanitizeUser(updatedUser),
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Unable to update user right now.",
+            error: error.message,
+        });
+    }
+};
+
 export const deleteManagedUser = async (req, res) => {
     try {
         const userId = String(req.params.userId || "").trim();
