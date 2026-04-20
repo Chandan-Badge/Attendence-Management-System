@@ -153,6 +153,16 @@ const StudentDashboard = () => {
     );
   }
 
+  if (isLoggingOut) {
+    return (
+      <PortalLayout activeRole={role}>
+        <section className="animate-fadeInUpFast">
+          <p className="mt-[10px] text-text-muted">Logging out...</p>
+        </section>
+      </PortalLayout>
+    );
+  }
+
   if (!authSession.identifier || authSession.role !== "student") {
     return <Navigate to="/login/student" replace />;
   }

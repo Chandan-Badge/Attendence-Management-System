@@ -105,6 +105,16 @@ const DashboardPage = () => {
     );
   }
 
+  if (isLoggingOut) {
+    return (
+      <PortalLayout activeRole={role}>
+        <section className="animate-fadeInUpFast">
+          <p className="mt-[10px] text-text-muted">Logging out...</p>
+        </section>
+      </PortalLayout>
+    );
+  }
+
   if (!authSession.identifier || authSession.role !== normalizedRoleKey) {
     return <Navigate to={`/login/${normalizedRoleKey}`} replace />;
   }

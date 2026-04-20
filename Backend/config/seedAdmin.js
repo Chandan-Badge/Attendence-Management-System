@@ -5,7 +5,7 @@ export const ensureDefaultAdmin = async () => {
     const adminIdentifier = (
         process.env.ADMIN_IDENTIFIER || "admin@ams.com"
     ).trim().toLowerCase();
-    const adminPassword = (process.env.ADMIN_PASSWORD || "admin123").trim();
+    const adminPassword = (process.env.ADMIN_PASSWORD || "admin123@").trim();
     const adminName = (process.env.ADMIN_NAME || "System Admin").trim();
 
     if (!adminIdentifier || !adminPassword || !adminName) {
@@ -18,6 +18,9 @@ export const ensureDefaultAdmin = async () => {
     });
 
     if (existingAdmin) {
+        existingAdmin.name = adminName;
+        existingAdmin.passwordHash = await bcrypt.hash(adminPassword, 10);
+        await existingAdmin.save();
         return existingAdmin;
     }
 

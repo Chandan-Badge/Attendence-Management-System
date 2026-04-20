@@ -15,7 +15,7 @@ const LoginPage = () => {
   
   // Demo credentials only for admin
   const demoCredentials = normalizedRoleKey === "admin" 
-    ? { identifier: "admin@ams.com", password: "admin123" }
+    ? { identifier: "admin@ams.com", password: "admin123@" }
     : null;
   const hasDemoCredentials = Boolean(demoCredentials);
 

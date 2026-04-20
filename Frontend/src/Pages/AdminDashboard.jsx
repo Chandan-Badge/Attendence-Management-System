@@ -82,6 +82,16 @@ const AdminDashboard = () => {
     );
   }
 
+  if (isLoggingOut) {
+    return (
+      <PortalLayout activeRole={role}>
+        <section className="animate-fadeInUpFast">
+          <p className="mt-[10px] text-text-muted">Logging out...</p>
+        </section>
+      </PortalLayout>
+    );
+  }
+
   if (!authSession.identifier || authSession.role !== "admin") {
     return <Navigate to="/login/admin" replace />;
   }
@@ -131,12 +141,10 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        <StatsGrid stats={adminStats} />
-
-        <div className="grid grid-cols-1 gap-[14px] min-[901px]:grid-cols-2">
+        {/* <div className="grid grid-cols-1 gap-[14px] min-[901px]:grid-cols-2">
           <DashboardCardList title="Quick Actions" items={adminActions} />
           <DashboardCardList title="Today Updates" items={adminUpdates} />
-        </div>
+        </div> */}
 
         <AdminUserManagementPanel />
       </section>
