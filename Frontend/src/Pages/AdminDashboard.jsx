@@ -66,7 +66,7 @@ const AdminDashboard = () => {
       ];
 
   const actionButtonBaseClassName =
-    "rounded-xl border-0 px-4 py-[11px] font-body text-[0.94rem] font-bold transition-transform duration-150 ease-in-out hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-primary)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-75 disabled:transform-none";
+    "rounded-xl border-0 px-4 py-[11px] font-body text-[0.94rem] font-bold transition-transform duration-150 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-primary)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-75 disabled:transform-none";
 
   if (!role || normalizedRoleKey !== "admin") {
     return <Navigate to="/" replace />;
@@ -132,7 +132,7 @@ const AdminDashboard = () => {
             </button>
             <button
               type="button"
-              className={`${actionButtonBaseClassName} bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)] text-white shadow-[0_10px_20px_rgba(22,163,74,0.25)]`}
+              className={`${actionButtonBaseClassName} bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)] text-white`}
               onClick={handleLogout}
               disabled={isLoggingOut}
             >

@@ -70,7 +70,7 @@ const AdminUserManagementPanel = () => {
     "w-full rounded-[10px] border border-[#d2dbea] bg-white px-3 py-2.5 font-body text-[0.95rem] focus:border-[var(--accent-primary)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-primary)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-75";
 
   const primaryButtonClassName =
-    "rounded-xl border-0 bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)] px-4 py-[11px] font-body text-[0.94rem] font-bold text-white shadow-[0_10px_20px_rgba(14,165,233,0.25)] transition-transform duration-150 ease-in-out hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-primary)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-75 disabled:transform-none";
+    "rounded-xl border-0 bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)] px-4 py-[11px] font-body text-[0.94rem] font-bold text-white transition-transform duration-150 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-primary)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-75 disabled:transform-none";
 
   const selectedIdentifierLabel = IDENTIFIER_LABEL_BY_ROLE[formData.role] || "Identifier";
   const editIdentifierLabel = IDENTIFIER_LABEL_BY_ROLE[editFormData.role] || "Identifier";
@@ -716,7 +716,7 @@ const AdminUserManagementPanel = () => {
             className="absolute inset-0 bg-[#0b1324]/55"
             onClick={closeEditModal}
           />
-          <div className="relative z-10 max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-[#d8e5f8] bg-white p-5 shadow-[0_22px_60px_rgba(11,19,36,0.28)]">
+          <div className="relative z-10 max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-[#d8e5f8] bg-white p-5">
             <div className="flex items-start justify-between gap-3">
               <div>
                 <h4 className="font-heading text-[1.2rem]">Edit {editFormData.role} Account</h4>
@@ -925,7 +925,7 @@ const AdminUserManagementPanel = () => {
             className="absolute inset-0 bg-[#0f172a]/55"
             onClick={closeDeleteModal}
           />
-          <div className="relative z-10 w-full max-w-md rounded-2xl border border-[#f5cbcb] bg-white p-5 shadow-[0_24px_60px_rgba(15,23,42,0.3)]">
+          <div className="relative z-10 w-full max-w-md rounded-2xl border border-[#f5cbcb] bg-white p-5">
             <div className="flex items-start gap-3">
               <div className="mt-0.5 rounded-full bg-[#fff0f0] p-2.5 text-[#b42318]" aria-hidden="true">
                 !
@@ -952,7 +952,7 @@ const AdminUserManagementPanel = () => {
                 type="button"
                 onClick={confirmDeleteUser}
                 disabled={Boolean(deletingUserId)}
-                className="rounded-xl border-0 bg-[#d92d20] px-4 py-[10px] text-[0.9rem] font-bold text-white shadow-[0_12px_24px_rgba(217,45,32,0.28)] hover:bg-[#bf241a] disabled:cursor-not-allowed disabled:opacity-60"
+                className="rounded-xl border-0 bg-[#d92d20] px-4 py-[10px] text-[0.9rem] font-bold text-white hover:bg-[#bf241a] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {deletingUserId ? "Deleting..." : "Delete Permanently"}
               </button>

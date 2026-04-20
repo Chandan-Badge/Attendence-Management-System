@@ -47,7 +47,7 @@ const StudentDashboard = () => {
   const [dateToFilter, setDateToFilter] = useState("");
 
   const actionButtonBaseClassName =
-    "rounded-xl border-0 px-4 py-[11px] font-body text-[0.94rem] font-bold transition-transform duration-150 ease-in-out hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-primary)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-75 disabled:transform-none";
+    "rounded-xl border-0 px-4 py-[11px] font-body text-[0.94rem] font-bold transition-transform duration-150 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-primary)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-75 disabled:transform-none";
 
   const loadAttendance = async (filters = {}) => {
     setIsAttendanceLoading(true);
@@ -203,7 +203,7 @@ const StudentDashboard = () => {
             </button>
             <button
               type="button"
-              className={`${actionButtonBaseClassName} bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)] text-white shadow-[0_10px_20px_rgba(14,165,233,0.25)]`}
+              className={`${actionButtonBaseClassName} bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)] text-white`}
               onClick={handleLogout}
               disabled={isLoggingOut}
             >
@@ -273,14 +273,14 @@ const StudentDashboard = () => {
               <button
                 type="button"
                 onClick={handleApplyFilters}
-                className="w-full rounded-xl bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)] px-4 py-[11px] font-body text-[0.94rem] font-bold text-white shadow-[0_10px_20px_rgba(14,165,233,0.25)] transition-transform duration-150 ease-in-out hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-primary)] focus-visible:ring-offset-2"
+                className="w-full rounded-xl bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)] px-4 py-[11px] font-body text-[0.94rem] font-bold text-white transition-transform duration-150 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-primary)] focus-visible:ring-offset-2"
               >
                 Apply
               </button>
               <button
                 type="button"
                 onClick={handleResetFilters}
-                className="w-full rounded-xl border border-[#dbe6f6] bg-white px-4 py-[11px] font-body text-[0.94rem] font-bold text-[#1f2f49] transition-transform duration-150 ease-in-out hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-primary)] focus-visible:ring-offset-2"
+                className="w-full rounded-xl border border-[#dbe6f6] bg-white px-4 py-[11px] font-body text-[0.94rem] font-bold text-[#1f2f49] transition-transform duration-150 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-primary)] focus-visible:ring-offset-2"
               >
                 Reset
               </button>

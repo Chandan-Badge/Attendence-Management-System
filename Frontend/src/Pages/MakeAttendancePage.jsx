@@ -211,7 +211,7 @@ const MakeAttendancePage = () => {
           <button
             type="button"
             onClick={() => navigate(`/dashboard/${normalizedRoleKey}`)}
-            className="rounded-xl bg-[#eef4ff] px-4 py-[11px] font-body text-[0.94rem] font-bold text-[#1f2f49] transition-transform duration-150 ease-in-out hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-primary)] focus-visible:ring-offset-2"
+            className="rounded-xl bg-[#eef4ff] px-4 py-[11px] font-body text-[0.94rem] font-bold text-[#1f2f49] transition-transform duration-150 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-primary)] focus-visible:ring-offset-2"
           >
             Back to Dashboard
           </button>
@@ -266,7 +266,7 @@ const MakeAttendancePage = () => {
                 type="button"
                 onClick={handleLoadStudents}
                 disabled={isStudentsLoading}
-                className="w-full rounded-xl bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)] px-4 py-[11px] font-body text-[0.94rem] font-bold text-white shadow-[0_10px_20px_rgba(249,115,22,0.25)] transition-transform duration-150 ease-in-out hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-primary)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70 disabled:transform-none"
+                className="w-full rounded-xl bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)] px-4 py-[11px] font-body text-[0.94rem] font-bold text-white transition-transform duration-150 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-primary)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70 disabled:transform-none"
               >
                 {isStudentsLoading ? "Loading..." : "Load Students"}
               </button>
@@ -342,7 +342,7 @@ const MakeAttendancePage = () => {
                   type="button"
                   onClick={handleSubmitAttendance}
                   disabled={isSubmitting}
-                  className="rounded-xl bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)] px-5 py-[11px] font-body text-[0.94rem] font-bold text-white shadow-[0_10px_20px_rgba(249,115,22,0.25)] transition-transform duration-150 ease-in-out hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-primary)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70 disabled:transform-none"
+                  className="rounded-xl bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)] px-5 py-[11px] font-body text-[0.94rem] font-bold text-white shadow-[0_10px_20px_rgba(249,115,22,0.25)] transition-transform duration-150 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-primary)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70 disabled:transform-none"
                 >
                   {isSubmitting ? "Submitting..." : "Submit Attendance"}
                 </button>

@@ -40,7 +40,6 @@ const Navbar = ({ activeRole }) => {
     <header className="mb-6 rounded-2xl border border-[#d9e5f7] bg-[linear-gradient(160deg,rgba(255,255,255,0.95),rgba(241,248,255,0.92))] p-4 shadow-[0_12px_28px_rgba(15,23,42,0.08)] sm:p-5">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)] shadow-[0_10px_18px_rgba(15,23,42,0.16)]" />
           <div>
             <p className="m-0 text-[0.72rem] font-extrabold uppercase tracking-[0.08em] text-text-muted">
               Attendance Management System
@@ -66,11 +65,10 @@ const Navbar = ({ activeRole }) => {
             <Link
               key={item.to}
               to={item.to}
-              className={`rounded-full px-3 py-1.5 text-[0.84rem] font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-primary)] focus-visible:ring-offset-2 ${
-                isActive
+              className={`rounded-full px-3 py-1.5 text-[0.84rem] font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-primary)] focus-visible:ring-offset-2 ${isActive
                   ? "bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-secondary)] text-white"
                   : "bg-[#edf4ff] text-[#1f3658] hover:bg-[#dceaff]"
-              }`}
+                }`}
             >
               {item.label}
             </Link>
